@@ -4,20 +4,18 @@
 
 const char* cheats[10] = {"Baja Buggy", "Jet Fighter", "Hovercraft", "Battle Tank", "Radio Control Car", "All Cars", "All Tracks", "All Parts", "All Difficulties", "Ford Super Focus"};
 
-int32_t calcseed(int32_t input) {
+int32_t calcseed(const int32_t input) {
  int32_t seed = 0x01;
  if(input != 0) {
   seed = 0x39;
-  for(int32_t i = 0; i < input - 1; i++) {
-   seed = (0x39 * seed) % 0x44A5;
-  }
+  for(int32_t i = 0; i < input - 1; i++) seed = (0x39 * seed) % 0x44A5;
  }
  return seed;
 }
 
-void gencode(char code[], int32_t accesscode, int32_t cheatid) {
- int32_t seed1 = calcseed((cheatid % 0x64) ^ (accesscode % 0x64));
- int32_t seed2 = calcseed((cheatid % 0x64) ^ ((accesscode / 0x64) % 0x64));
+void gencode(char code[], const int32_t accesscode, const int32_t cheatid) {
+ const int32_t seed1 = calcseed((cheatid % 0x64) ^ (accesscode % 0x64));
+ const int32_t seed2 = calcseed((cheatid % 0x64) ^ ((accesscode / 0x64) % 0x64));
  code[0] = 0x5A - (seed1 % 0x1A);
  code[1] = 0x5A - ((seed1 / 0x2A4) % 0x1A);
  code[2] = 0x5A - ((seed1 / 0x1A) % 0x1A);
@@ -32,15 +30,15 @@ int main(int argc, char* argv[]) {
   printf("Invalid command\n");
   return 1;
  }
- int32_t accesscode = atoi(argv[1]);
+ const int32_t accesscode = strtol(argv[1], NULL, 10);
  if(accesscode < 0 || accesscode > 9999) {
   printf("Valid access codes are in range 0 - 9999\n");
   return 1;
  }
  printf("Colin McRae Rally 3 Cheats\n");
  printf("Access code: %i\n", accesscode);
+ char code[7];
  for(int i = 0; i < 10; i++) {
-  char code[7];
   gencode(code, accesscode, i);
   printf("%s: %s\n", cheats[i], code);
  }
