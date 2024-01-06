@@ -9,7 +9,7 @@ const char* platforms[4] = {"PC", "PS2", "PSP", "XBOX"};
 
 int isplatform(char platform[]) {
  for(size_t i = 0; i < strlen(platform); i++) platform[i] = toupper(platform[i]);
- for(int i = 0; i < 4; i++) if(strcmp(platform, platforms[i]) == 0) return 1;
+ for(size_t i = 0; i < 4; i++) if(strcmp(platform, platforms[i]) == 0) return 1;
  return 0;
 }
 
